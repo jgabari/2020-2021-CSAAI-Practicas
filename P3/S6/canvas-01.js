@@ -18,5 +18,6 @@ ctx.beginPath();
     ctx.fill();
 
     // trazo del rectangulo
+    ctx.lineWidth = 3;
     ctx.stroke();
 ctx.closePath();
