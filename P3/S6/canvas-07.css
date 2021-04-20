@@ -1,0 +1,11 @@
+canvas {
+    background-color: rgb(50, 50, 50);
+    border-style: solid;
+    border-width: 3px;
+    border-color: black;
+    border-radius: 3px;
+}
+
+#logo-urjc {
+    display: none;
+}
