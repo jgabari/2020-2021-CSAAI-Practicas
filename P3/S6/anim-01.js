@@ -9,9 +9,12 @@ canvas.height = 480;
 // contexto
 const ctx = canvas.getContext("2d");
 
-// posicion del elemento a animar
-let x = 0;
-let y = 0;
+// posicion inicial del elemento a animar
+let x = 10;
+let y = 20;
+
+// velocidad horizontal del objeto
+let velx = 1;
 
 // funcion principal de animacion
 function update() {
@@ -19,8 +22,7 @@ function update() {
 
     // algoritmo de animación:
     // 1. actualizar posiciones de los elementos
-    x = x + 0;
-    y = y + y;
+    x = x + velx;
 
     // 2. Borrar el canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
