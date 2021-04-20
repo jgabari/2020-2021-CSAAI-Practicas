@@ -14,7 +14,8 @@ let x = 10;
 let y = 20;
 
 // velocidad horizontal del objeto
-let velx = 1;
+let velx = 5;
+let vely = 1;
 
 // funcion principal de animacion
 function update() {
@@ -28,6 +29,7 @@ function update() {
     }
     // actualizar posicion
     x = x + velx;
+    y = y + vely;
 
     // 2. Borrar el canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
