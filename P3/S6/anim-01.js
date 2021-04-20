@@ -15,7 +15,7 @@ let y = 20;
 
 // velocidad horizontal del objeto
 let velx = 5;
-let vely = 1;
+let vely = 2;
 
 // funcion principal de animacion
 function update() {
@@ -23,8 +23,12 @@ function update() {
 
     // algoritmo de animación:
     // 1. actualizar posiciones de los elementos
-    // *rebote: si llega al borde se invierte la velocidad
+    // *rebote lados
     if (x < 0 || x >= (canvas.width - 20)) {
+        velx = -velx;
+    }
+    // *rebote arriba y abajo
+    if (y < 0 || x >= (canvas.height - 20)) {
         velx = -velx;
     }
     // actualizar posicion
