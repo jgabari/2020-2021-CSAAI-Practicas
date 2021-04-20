@@ -22,6 +22,11 @@ function update() {
 
     // algoritmo de animación:
     // 1. actualizar posiciones de los elementos
+    // *rebote: si llega al borde se invierte la velocidad
+    if (x >= canvas.width) {
+        velx = -velx;
+    }
+    // actualizar posicion
     x = x + velx;
 
     // 2. Borrar el canvas
