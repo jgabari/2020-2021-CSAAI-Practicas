@@ -28,8 +28,8 @@ function update() {
         velx = -velx;
     }
     // *rebote arriba y abajo
-    if (y < 0 || x >= (canvas.height - 20)) {
-        velx = -velx;
+    if (y < 0 || y >= (canvas.height - 20)) {
+        vely = -vely;
     }
     // actualizar posicion
     x = x + velx;
