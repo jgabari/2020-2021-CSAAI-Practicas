@@ -1,11 +1,13 @@
-// acceder al cuerpo del html
-body = document.getElementsByTagName('body')[0];
+console.log("Ejecutando js.....");
 
-// funcion de retrollamada de la tecla
+const display = document.getElementById("display");
+
+// tecla pulsada: mostrar su información
 window.onkeydown = (e) => {
-    // comprobar si la tecla es el espacio
-    if (e.key == ' ') {
-        // cambiar la activacion de la clase color
-        body.classList.toggle("color");
-    }
+    display.innerHTML = `Tecla: ${e.key}. Código: ${e.keyCode}`
+}
+
+// tecla liberada: borrar el párrafo
+window.onkeyup = (e) => {
+    display.innerHTML = ''
 }
