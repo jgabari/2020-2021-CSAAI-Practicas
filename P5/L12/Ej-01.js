@@ -9,6 +9,8 @@ const btn_video2 = document.getElementById("btn_video2");
 
 const btn_test = document.getElementById("btn_test");
 
+const btn_bucle = document.getElementById("btn_bucle");
+
 const btn_manual = document.getElementById("btn_manual");
 const btn_auto = document.getElementById("btn_auto");
 
@@ -32,6 +34,8 @@ const TEST_IMAGE_URL = "test.png";
 var onoff = false;
 //-- -- Modo manual/automático (modo inicial manual -> false)
 var auto = false;
+//-- -- Bucle activado/desactivado (modo inicial desactivado -> false)
+var bucle = false;
 
 //-- Imagen estática a mostrar cuando el video no
 //-- ha arrancado (estado inicial)
@@ -75,6 +79,8 @@ btn_src_off.onclick = () => {
         video1.src = null;
         video2.poster = TEST_IMAGE_URL;
         video2.src = null;
+        auto = false;
+        bucle = false;
     }
 };
 
@@ -94,6 +100,22 @@ btn_auto.onclick = () => {
         auto = true;
         console.log('MODO AUTOMÁTICO');
         setTimeout(change_src, 3000);
+    }
+};
+
+//-------------------------------------------------------------------------------------------------BUCLE ACTIVADO/DESACTIVADO
+
+//-- Boton de BUCLE (si está activado se desactiva y si está desactivado se activa)
+btn_bucle.onclick = () => {
+    if (onoff==true) {
+        if (bucle==true) {
+            bucle = false;
+        } else {
+            bucle = true;
+            directo.currentTime = 0;
+            setTimeout(bucle2s, 2000);
+            console.log('MODO BUCLE');
+        }
     }
 };
 
@@ -145,5 +167,11 @@ function change_src() {
         directo.poster=null;
         setTimeout(change_src, 3000);
     }
+}
 
+function bucle2s() {
+    if (bucle==true) {
+        directo.currentTime = 0;
+        setTimeout(bucle2s, 2000);
+    }
 }
