@@ -15,10 +15,12 @@ const ctx = canvas.getContext("2d");
 // posicion inicial del elemento a animar
 let x = 10;
 let y = 20;
+let x1 = canvas.width/2;
 
 // velocidad horizontal del objeto
 let velx = 5;
 let vely = 2;
+let velx1 = 15;
 
 // funcion principal de animacion
 function update() {
@@ -37,6 +39,19 @@ function update() {
     // actualizar posicion
     x = x + velx;
     y = y + vely;
+    
+    // teclas
+    window.onkeydown = (e) => {
+        // comprobar si la tecla es una que nos interese
+        if (e.key == 'ArrowRight') {
+            // raqueta a la derecha
+            x1 = x1 + velx1;
+        }
+        if (e.key == 'ArrowLeft') {
+            // raqueta a la izquierda
+            x1 = x1 - velx1;
+        }
+    }
 
     // 2. Borrar el canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -95,9 +110,22 @@ function update() {
         }
     }
 
+    // Funciones para dibujar la bola
     ctx.beginPath();
         // bola
         ctx.arc(x,y, 5, 0, 2*Math.PI);
+
+        // dibujar
+        ctx.fillStyle = 'red';
+
+        // rellenar
+        ctx.fill();
+    ctx.closePath();
+
+    // Funciones para dibujar la raqueta
+    ctx.beginPath();
+        // rectángulo
+        ctx.rect(x1, (canvas.height-50), 50, 9);
 
         // dibujar
         ctx.fillStyle = 'red';
