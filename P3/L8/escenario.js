@@ -9,18 +9,19 @@ canvas.height = 640;
 // contexto
 const ctx = canvas.getContext("2d");
 
-
-
 // animación bola
 // posicion inicial del elemento a animar
-let x = 10;
-let y = 20;
+let x = canvas.width/2;
+let y = canvas.height-150;
 let x1 = canvas.width/2;
 
 // velocidad horizontal del objeto
-let velx = 5;
-let vely = 2;
+let velx = 6;
+let vely = -3;
 let velx1 = 15;
+
+// variable de estado del saque
+var saque = false;
 
 // funcion principal de animacion
 function update() {
@@ -33,12 +34,21 @@ function update() {
         velx = -velx;
     }
     // *rebote arriba y abajo
-    if (y < 0 || y >= (canvas.height - 10)) {
+    if (y < 0) {
         vely = -vely;
     }
+    // llegada al borde de abajo
+    if (y >= (canvas.height-10)) {
+        x = canvas.width/2;
+        y = canvas.height-150;
+        vely = -vely;
+        saque = false;
+    }
     // actualizar posicion
-    x = x + velx;
-    y = y + vely;
+    if (saque == true) {
+        x = x + velx;
+        y = y + vely;
+    }
     
     // teclas
     window.onkeydown = (e) => {
@@ -50,6 +60,9 @@ function update() {
         if (e.key == 'ArrowLeft') {
             // raqueta a la izquierda
             x1 = x1 - velx1;
+        }
+        if (e.key == ' ') {
+            saque = true;
         }
     }
 
