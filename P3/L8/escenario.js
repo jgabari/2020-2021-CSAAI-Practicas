@@ -9,6 +9,10 @@ canvas.height = 640;
 // contexto
 const ctx = canvas.getContext("2d");
 
+//Crear los elementos de sonido
+const s_pared = new Audio('pong-rebote.mp3');
+const s_raqueta = new Audio('pong-raqueta.mp3');
+
 // animación bola
 // posicion inicial del elemento a animar
 let x = canvas.width/2;
@@ -42,6 +46,9 @@ const RAQUETA = {
     h: 10,
 };
 
+// Contador de vidas
+var vidas = 5;
+
 // funcion principal de animacion
 function update() {
     console.log("test");
@@ -51,20 +58,27 @@ function update() {
     // *rebote lados
     if (x < 0 || x >= (canvas.width - 10)) {
         velx = -velx;
+        s_pared.currentTime = 0;
+        s_pared.play();
     }
     // *rebote arriba
     if (y < 0) {
         vely = -vely;
+        s_pared.currentTime = 0;
+        s_pared.play();
     }
     //rebote en la raqueta
     if ((x >= x1-(RAQUETA.w/2)) && (x <= x1+(RAQUETA.w/2)) && (y >= y1)) {
         vely = -vely;
+        s_raqueta.currentTime = 0;
+        s_raqueta.play();
     }
     // llegada al borde de abajo
     if (y >= (canvas.height-10)) {
         x = canvas.width/2;
         y = canvas.height-150;
         vely = -vely;
+        vidas = vidas - 1;
         saque = false;
     }
     // actualizar posicion
@@ -101,7 +115,7 @@ function update() {
     // texto vidas
     ctx.font = "25px Arial";
     ctx.fillStyle = 'red';
-    ctx.fillText("5", 340, 30);
+    ctx.fillText(vidas, 340, 30);
     
     
     
