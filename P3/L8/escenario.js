@@ -14,27 +14,50 @@ const ctx = canvas.getContext("2d");
 let x = canvas.width/2;
 let y = canvas.height-150;
 let x1 = canvas.width/2;
+const y1 = canvas.height-50;
 
 // velocidad horizontal del objeto
 let velx = 6;
 let vely = -3;
-let velx1 = 15;
+let velx1 = 20;
 
 // variable de estado del saque
 var saque = false;
 
+// Constantes de los ladrillos
+const LADRILLO = {
+    F: 7,
+    C: 14,
+    w: 27,
+    h: 9,
+    origen_x : 10,
+    origen_y: 40,
+    padding: 5,
+    visible: true
+};
+
+// Constantes de la raqueta
+const RAQUETA = {
+    w: 60,
+    h: 10,
+};
+
 // funcion principal de animacion
 function update() {
     console.log("test");
-
+    
     // algoritmo de animación:
     // 1. actualizar posiciones de los elementos
     // *rebote lados
     if (x < 0 || x >= (canvas.width - 10)) {
         velx = -velx;
     }
-    // *rebote arriba y abajo
+    // *rebote arriba
     if (y < 0) {
+        vely = -vely;
+    }
+    //rebote en la raqueta
+    if ((x >= x1-(RAQUETA.w/2)) && (x <= x1+(RAQUETA.w/2)) && (y >= y1)) {
         vely = -vely;
     }
     // llegada al borde de abajo
@@ -65,36 +88,26 @@ function update() {
             saque = true;
         }
     }
-
+    
     // 2. Borrar el canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+    
     // 3. dibujar elementos visibles
     // texto marcador
     ctx.font = "25px Arial";
     ctx.fillStyle = 'red';
     ctx.fillText("000", 10, 30);
-
+    
     // texto vidas
     ctx.font = "25px Arial";
     ctx.fillStyle = 'red';
     ctx.fillText("5", 340, 30);
-
-    // Constantes de los ladrillos
-    const LADRILLO = {
-        F: 7,
-        C: 14,
-        w: 27,
-        h: 9,
-        origen_x : 10,
-        origen_y: 40,
-        padding: 5,
-        visible: true
-    };
-
+    
+    
+    
     // Estructura de los ladrillos
     const ladrillos = [];
-
+    
     for (let i = 0; i < LADRILLO.F; i++) {
         ladrillos[i] = [];
         for (let j = 0; j < LADRILLO.C; j++) {
@@ -108,7 +121,7 @@ function update() {
             };
         }
     }
-
+    
     // Dibujar los ladrillos
     for (let i = 0; i < LADRILLO.F; i++) {
         for (let j = 0; j < LADRILLO.C; j++) {
@@ -122,31 +135,31 @@ function update() {
             }
         }
     }
-
+    
     // Funciones para dibujar la bola
     ctx.beginPath();
-        // bola
-        ctx.arc(x,y, 5, 0, 2*Math.PI);
-
-        // dibujar
-        ctx.fillStyle = 'red';
-
-        // rellenar
-        ctx.fill();
+    // bola
+    ctx.arc(x,y, 5, 0, 2*Math.PI);
+    
+    // dibujar
+    ctx.fillStyle = 'red';
+    
+    // rellenar
+    ctx.fill();
     ctx.closePath();
-
+    
     // Funciones para dibujar la raqueta
     ctx.beginPath();
-        // rectángulo
-        ctx.rect(x1, (canvas.height-50), 50, 9);
-
-        // dibujar
-        ctx.fillStyle = 'red';
-
-        // rellenar
-        ctx.fill();
+    // rectángulo
+    ctx.rect(x1, y1, RAQUETA.w, RAQUETA.h);
+    
+    // dibujar
+    ctx.fillStyle = 'red';
+    
+    // rellenar
+    ctx.fill();
     ctx.closePath();
-
+    
     // 4. volver a ejecutar update cuando toque
     requestAnimationFrame(update);
 }
