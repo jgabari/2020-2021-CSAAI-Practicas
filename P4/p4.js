@@ -48,11 +48,34 @@ let filtro = FILTRO.INICIO;
 //-- Función de retrollamada del botón COLORES
 btn_color.onclick = () => {
   filtro = FILTRO.COLOR;
+
+  //-- Poner la imagen original (por si se viene del filtro gris)
+  ctx.drawImage(img, 0,0);
 }
 
 //-- Función de retrollamada del botón GRISES
 btn_gris.onclick = () => {
   filtro = FILTRO.GRIS;
+  //-- Situar la imagen original en el canvas
+  //-- No se han hecho manipulaciones todavia
+  ctx.drawImage(img, 0,0);
+  
+  //-- Obtener la imagen del canvas en pixeles
+  let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  
+  //-- Obtener el array con todos los píxeles
+  let data = imgData.data;
+
+  //-- Aplicar el filtro de gris
+  for (let i = 0; i < data.length; i+=4) {
+    brillo = (3 * data[i] + 4 * data[i+1] + data[i+2])/8;
+    data[i] = brillo;
+    data[i+1] = brillo;
+    data[i+2] = brillo;
+  }
+
+  //-- Poner la imagen modificada en el canvas
+  ctx.putImageData(imgData, 0, 0);
 }
 
 function actualiza_colores() {
