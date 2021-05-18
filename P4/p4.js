@@ -5,6 +5,10 @@ const canvas = document.getElementById('canvas');
 const img = document.getElementById('imagesrc');
 const ctx = canvas.getContext('2d');
 
+//-- Botones
+const btn_color = document.getElementById('btn_color');
+const btn_gris = document.getElementById('btn_gris');
+
 //-- Acceso al deslizador
 const deslizadorR = document.getElementById('deslizadorR');
 const deslizadorG = document.getElementById('deslizadorG');
@@ -32,6 +36,24 @@ img.onload = function () {
   
   console.log("Imagen lista...");
 };
+
+//-- Variable de estado
+const FILTRO = {
+  INICIO: 0,
+  COLOR: 1,
+  GRIS: 2
+};
+let filtro = FILTRO.INICIO;
+
+//-- Función de retrollamada del botón COLORES
+btn_color.onclick = () => {
+  filtro = FILTRO.COLOR;
+}
+
+//-- Función de retrollamada del botón GRISES
+btn_gris.onclick = () => {
+  filtro = FILTRO.GRIS;
+}
 
 function actualiza_colores() {
   //-- Situar la imagen original en el canvas
@@ -71,8 +93,10 @@ function actualiza_colores() {
 deslizadorR.oninput = () => {
   //-- Mostrar el nuevo valor del deslizador
   range_valueR.innerHTML = deslizadorR.value;
-  
-  actualiza_colores();
+
+  if (filtro == FILTRO.COLOR) {
+    actualiza_colores();
+  }
 }
 
 //-- Funcion de retrollamada del deslizador VERDE
@@ -80,7 +104,9 @@ deslizadorG.oninput = () => {
   //-- Mostrar el nuevo valor del deslizador
   range_valueG.innerHTML = deslizadorG.value;
   
-  actualiza_colores();
+  if (filtro == FILTRO.COLOR) {
+    actualiza_colores();
+  }
 }
 
 //-- Funcion de retrollamada del deslizador AZUL
@@ -88,7 +114,9 @@ deslizadorB.oninput = () => {
   //-- Mostrar el nuevo valor del deslizador
   range_valueB.innerHTML = deslizadorB.value;
   
-  actualiza_colores();
+  if (filtro == FILTRO.COLOR) {
+    actualiza_colores();
+  }
 }
 
 console.log("Fin...");
