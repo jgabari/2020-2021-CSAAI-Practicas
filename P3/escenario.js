@@ -51,6 +51,22 @@ const LADRILLO = {
     visible: true
 };
 
+// --Estructura de los ladrillos
+const ladrillos = [];
+for (let i = 0; i < LADRILLO.F; i++) {
+    ladrillos[i] = [];
+    for (let j = 0; j < LADRILLO.C; j++) {
+        ladrillos[i][j] = {
+            x: LADRILLO.origen_x + ((LADRILLO.w + LADRILLO.padding) * j),
+            y: LADRILLO.origen_y + ((LADRILLO.h + LADRILLO.padding) * i),
+            w: LADRILLO.w,
+            h: LADRILLO.h,
+            padding: LADRILLO.padding,
+            visible: LADRILLO.visible
+        };
+    }
+}
+
 // Constantes de la raqueta
 const RAQUETA = {
     w: 60,
@@ -63,6 +79,34 @@ var vidas = 3;
 // Contador de puntos
 var puntos = 0;
 
+// Teclas y botón
+window.onkeydown = (e) => {
+    // Comprobar si la tecla es una que nos interese
+    if (e.key == 'ArrowRight') {
+        // Raqueta a la derecha
+        x1 = x1 + velx1;
+    }
+    if (e.key == 'ArrowLeft') {
+        // Raqueta a la izquierda
+        x1 = x1 - velx1;
+    }
+    if (e.key == ' ') {
+        if (estado == ESTADO.ESPERANDO) {
+            estado = ESTADO.JUGANDO;
+        }
+    }
+}
+
+btn_start.onclick = () => {
+    if (estado == ESTADO.INICIO) {
+        estado = ESTADO.ESPERANDO;
+    }
+    if (estado == ESTADO.MUERTE) {
+        estado = ESTADO.ESPERANDO;
+        vidas = 3;
+    }
+}
+
 // funcion principal del juego
 function update() {
     if (estado == ESTADO.INICIO) {
@@ -70,10 +114,62 @@ function update() {
         ctx.font = "25px Arial";
         ctx.fillStyle = 'red';
         ctx.fillText("Press START to play", 40, canvas.height/2);
-        btn_start.onclick = () => {
-            estado = ESTADO.ESPERANDO;
+    }
+    if (estado == ESTADO.ESPERANDO || estado == ESTADO.JUGANDO) {
+        if (estado == ESTADO.JUGANDO) {
+            // Fisicas de la bola
+            // --Deteccion de la colision
+            for (let i = 0; i < LADRILLO.F; i++) {
+                for (let j = 0; j < LADRILLO.C; j++) {
+                    if (ladrillos[i][j].visible) {
+                        if ((x >= ladrillos[i][j].x) && (x <= ladrillos[i][j].x + ladrillos.w)) {
+                            if ((y >= ladrillos[i][j].y) && (y <= ladrillos[i][j].y + ladrillos.h)) {
+                                console.log('entra');
+                                vely = -vely;
+                                ladrillos[i][j].visible = false;
+                                puntos = puntos + 1;
+                                s_ladrillo.currentTime = 0;
+                                s_ladrillo.play();
+                            }
+                        }
+                    }
+                }
+            }
+            // --Rebote lados
+            if (x < 0 || x >= (canvas.width - 10)) {
+                velx = -velx;
+                s_pared.currentTime = 0;
+                s_pared.play();
+            }
+            // --Rebote arriba
+            if (y < 40) {
+                vely = -vely;
+                s_pared.currentTime = 0;
+                s_pared.play();
+            }
+            // --Llegada al borde de abajo
+            if (y >= (canvas.height-10)) {
+                x = canvas.width/2;
+                y = canvas.height-150;
+                vely = -vely;
+                vidas = vidas - 1;
+                estado = ESTADO.ESPERANDO;
+                if (vidas == 0) {
+                    estado = ESTADO.MUERTE;
+                }
+            }
+            // --Rebote en la raqueta
+            if (x >= (x1-(RAQUETA.w/2)) && x <= (x1+(RAQUETA.w/2))) {
+                    if (y >= (y1-(RAQUETA.h/2)) && y <= (y1+(RAQUETA.h/2))) {
+                    vely = -vely;
+                    s_raqueta.currentTime = 0;
+                    s_raqueta.play();
+                }
+            }
+            // --Actualizar la posicion
+            x = x + velx;
+            y = y + vely;
         }
-    } else if (estado == ESTADO.ESPERANDO || estado == ESTADO.JUGANDO) {
         // Borrar el canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // Dibujar elementos visibles
@@ -85,21 +181,6 @@ function update() {
         ctx.font = "25px Arial";
         ctx.fillStyle = 'red';
         ctx.fillText(vidas, 440, 30);
-        // --Estructura de los ladrillos
-        const ladrillos = [];
-        for (let i = 0; i < LADRILLO.F; i++) {
-            ladrillos[i] = [];
-            for (let j = 0; j < LADRILLO.C; j++) {
-                ladrillos[i][j] = {
-                    x: LADRILLO.origen_x + ((LADRILLO.w + LADRILLO.padding) * j),
-                    y: LADRILLO.origen_y + ((LADRILLO.h + LADRILLO.padding) * i),
-                    w: LADRILLO.w,
-                    h: LADRILLO.h,
-                    padding: LADRILLO.padding,
-                    visible: LADRILLO.visible
-                };
-            }
-        }
         // --Dibujar los ladrillos
         for (let i = 0; i < LADRILLO.F; i++) {
             for (let j = 0; j < LADRILLO.C; j++) {
@@ -131,87 +212,12 @@ function update() {
             // rellenar
             ctx.fill();
         ctx.closePath();
-        if (estado == ESTADO.ESPERANDO) {
-            window.onkeydown = (e) => {
-                if (e.key == ' ') {
-                    estado = ESTADO.JUGANDO;
-                }
-            }
-        } else if (estado == ESTADO.JUGANDO) {
-            // Fisicas de la bola
-            // --Actualizar la posicion
-            x = x + velx;
-            y = y + vely;
-            // --Deteccion de la colision
-            for (let i = 0; i < LADRILLO.F; i++) {
-                for (let j = 0; j < LADRILLO.C; j++) {
-                    if (ladrillos[i][j].visible) {
-                        if (x > ladrillos[i][j].x && x < ladrillos[i][j].x + ladrillos.w) {
-                            if (y > ladrillos[i][j].y && y < ladrillos[i][j].y + ladrillos.h) {
-                                console.log('entra');
-                                vely = -vely;
-                                ladrillos[i][j].visible = false;
-                                puntos = puntos + 1;
-                                s_ladrillo.currentTime = 0;
-                                s_ladrillo.play();
-                            }
-                        }
-                    }
-                }
-            }
-            // --Rebote lados
-            if (x < 0 || x >= (canvas.width - 10)) {
-                velx = -velx;
-                s_pared.currentTime = 0;
-                s_pared.play();
-            }
-            // --Rebote arriba
-            if (y < 0) {
-                vely = -vely;
-                s_pared.currentTime = 0;
-                s_pared.play();
-            }
-            // --Llegada al borde de abajo
-            if (y >= (canvas.height-10)) {
-                x = canvas.width/2;
-                y = canvas.height-150;
-                vely = -vely;
-                vidas = vidas - 1;
-                estado = ESTADO.ESPERANDO;
-                if (vidas == 0) {
-                    estado = ESTADO.MUERTE;
-                }
-            }
-            // --Rebote en la raqueta
-            if (x >= (x1-(RAQUETA.w/2)) && x <= (x1+(RAQUETA.w/2))) {
-                    if (y >= (y1-(RAQUETA.h/2)) && y <= (y1+(RAQUETA.h/2))) {
-                    vely = -vely;
-                    s_raqueta.currentTime = 0;
-                    s_raqueta.play();
-                }
-            }
-            // Teclas
-            window.onkeydown = (e) => {
-                // Comprobar si la tecla es una que nos interese
-                if (e.key == 'ArrowRight') {
-                    // Raqueta a la derecha
-                    x1 = x1 + velx1;
-                }
-                if (e.key == 'ArrowLeft') {
-                    // Raqueta a la izquierda
-                    x1 = x1 - velx1;
-                }
-            }
-        }
-    } else if (estado == ESTADO.MUERTE) {
+    }
+    if (estado == ESTADO.MUERTE) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = "25px Arial";
         ctx.fillStyle = 'red';
         ctx.fillText("GAME OVER Press START to replay", 20, canvas.height/2);
-        btn_start.onclick = () => {
-            vidas = 3;
-            estado = ESTADO.ESPERANDO;
-        }
     }
     requestAnimationFrame(update);
 }
