@@ -1,0 +1,83 @@
+body {
+    background-color: white;
+}
+
+#calculadora{
+    padding-top: 20px;
+    padding-bottom: 23px;
+    background-color: rgb(50, 50, 50);
+    border-radius: 10px 10px 10px 10px;
+    border-bottom: 8px solid rgb(30, 30, 30);
+    border-right: 3px solid rgb(25, 25, 25);
+    border-left: 3px solid rgb(25, 25, 25);
+    text-align: center;
+    margin-top: 60px;
+    margin-right: auto;
+    margin-left: auto;
+    width: 450px;
+}
+
+@font-face {
+    font-family: "calculadora";
+    src: url(https://jgabari.github.io/2020-2021-CSAAI-Practicas/P2/DS-DIGI.TTF);
+    font-weight: bold;
+  }
+
+#display {
+    background-color: rgb(150, 170, 150);
+    color: rgb(25, 25, 25);
+    text-align: left;
+    font-family: "calculadora";
+    font-weight: bold;
+    font-size: 55px;
+    width: 380px;
+    height: 75px;
+    border-radius: 10px 10px 10px 10px;
+    border-top: 5px solid rgb(30, 30, 30);
+    border-right: 5px solid rgb(60, 60, 60);
+    border-left: 5px solid rgb(25, 25, 25);
+    border-bottom: 5px solid rgb(40, 40, 40);
+    margin-left: 30px;
+}
+
+#digitos {
+    width: 75%;
+}
+
+#operadores {
+    width: 25%;
+    float: right;
+    margin-right: 15px;
+}
+
+#otros {
+    width: 100%;
+}
+
+button {
+    background-color: rgb(100, 100, 100);
+    color: white;
+    padding: 15px;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    margin: 5px 5px 5px 5px;
+    border-radius: 5px 5px 20px 20px;
+    border-bottom: 5px solid rgb(75, 75, 75);
+    width: 75px;
+}
+
+.operacion {
+    background-color: rgb(25, 25, 25);
+    border-bottom: 5px solid rgb(10, 10, 10);
+}
+
+.otro {
+    background-color: rgb(100, 0, 0);
+    border-bottom: 5px solid rgb(75, 0, 0);
+    width: auto;
+}
+
+#igual {
+    width: 175px;
+}
