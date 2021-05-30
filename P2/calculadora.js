@@ -6,6 +6,7 @@ resta = document.getElementById("resta")
 multiplicacion = document.getElementById("multiplicacion")
 division = document.getElementById("division")
 igual = document.getElementById("igual")
+del = document.getElementById("delete")
 clear = document.getElementById("clear")
 
 //-- Estados de la calculadora
@@ -111,6 +112,44 @@ igual.onclick = () => {
 
         //-- Pasar al estado OP1
         estado = ESTADO.OP1;
+
+    }
+}
+
+//-- Borrar el último caracter
+const OPERADORES = {
+    '+': "suma",
+    '-': "resta",
+    '*': "multiplicacion",
+    '/': "division"
+};
+
+del.onclick = () => {
+
+    if (display.innerHTML.length == 1) {
+
+        //-- Si solo queda un caracter y se borra, mismo
+        //-- efecto que el clear
+        display.innerHTML = "0";
+        estado = ESTADO.INIT;
+
+    } else {
+
+        display.innerHTML = display.innerHTML.slice(0, -1);
+        
+        //-- Aquí qncontré un bug que impedía poner un nuevo
+        //-- operador si borrabas el anterior, porque no se
+        //-- tenía en cuenta que al borrar un caracter podía
+        //-- hacer falta cambiar de estado. Así lo soluciono:
+        var volverOP1 = true;
+        for (var i = 0; i < display.innerHTML.length; i++) {
+            if (display.innerHTML.charAt(i) in OPERADORES) {
+                volverOP1 = false;
+            }
+        }
+        if (volverOP1 == true) {
+            estado = ESTADO.OP1;
+        }
 
     }
 }
